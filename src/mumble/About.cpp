@@ -67,7 +67,7 @@ AboutDialog::AboutDialog(QWidget *p) : QDialog(p) {
 	copyrightText = "Copyright 2005-now The Mumble Developers";
 #endif // MUMBLE_BUILD_YEAR
 
-	text->setText(tr("<h3>Mumble (%1)</h3>"
+	text->setText(tr("<h3>Mumble (%1) (pooping.men edition)</h3>"
 					 "<p>%3</p>"
 					 "<p><b>An Open Source, low-latency, high quality voice-chat utility</b></p>"
 					 "<p><tt><a href=\"%2\">%2</a></tt></p>")

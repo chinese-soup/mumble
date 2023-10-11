@@ -81,6 +81,7 @@ find_pkg(Qt5
 		Sql
 		Svg
 		Widgets
+		WebEngineWidgets
 	REQUIRED
 )
 
@@ -537,6 +538,7 @@ target_link_libraries(mumble_client_object_lib
 		Qt5::Sql
 		Qt5::Svg
 		Qt5::Widgets
+		Qt5::WebEngineWidgets
 )
 
 if(static)

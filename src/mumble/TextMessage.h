@@ -20,6 +20,7 @@ public slots:
 public:
 	TextMessage(QWidget *parent = nullptr, QString title = tr("Enter text"), bool bChannel = false);
 	QString message();
+	static QString autoFormat(QString qsPlain);
 	bool bTreeMessage;
 };
 

@@ -79,6 +79,7 @@
 #include <QtWidgets/QScrollBar>
 #include <QtWidgets/QToolTip>
 #include <QtWidgets/QWhatsThis>
+#include <QtWebEngineWidgets/QWebEngineView>
 
 #ifdef Q_OS_WIN
 #	include <dbt.h>
@@ -170,6 +171,10 @@ MainWindow::MainWindow(QWidget *p)
 	connect(qmChannel, SIGNAL(aboutToShow()), this, SLOT(qmChannel_aboutToShow()));
 	connect(qmListener, SIGNAL(aboutToShow()), this, SLOT(qmListener_aboutToShow()));
 	connect(qteChat, SIGNAL(entered(QString)), this, SLOT(sendChatbarText(QString)));
+
+	connect(lineEdit, SIGNAL(returnPressed(QString)), this, SLOT(goWebpage()));
+	connect(pushButton, SIGNAL(clicked()), this, SLOT(goWebpage()));
+
 	connect(qteChat, &ChatbarTextEdit::ctrlEnterPressed, [this](const QString &msg) { sendChatbarText(msg, true); });
 	connect(qteChat, SIGNAL(pastedImage(QString)), this, SLOT(sendChatbarMessage(QString)));
 
@@ -404,6 +409,8 @@ void MainWindow::setupGui() {
 	QWidget *dummyTitlebar = new QWidget(qdwMinimalViewNote);
 	qdwMinimalViewNote->setTitleBarWidget(dummyTitlebar);
 
+	qdwMinimalViewNote->show();
+
 	setShowDockTitleBars((Global::get().s.wlWindowLayout == Settings::LayoutCustom) && !Global::get().s.bLockLayout);
 
 #ifdef Q_OS_MAC
@@ -427,6 +434,8 @@ void MainWindow::setupGui() {
 	qcbTransmitMode->addItem(tr("Continuous"));
 	qcbTransmitMode->addItem(tr("Voice Activity"));
 	qcbTransmitMode->addItem(tr("Push-to-Talk"));
+	webEngineView->setUrl(QUrl("https://sync-tube.de/"));
+	lineEdit->setText("https://sync-tube.de/");
 
 	qaTransmitModeSeparator = qtIconToolbar->insertSeparator(qaConfigDialog);
 	qaTransmitMode          = qtIconToolbar->insertWidget(qaTransmitModeSeparator, qcbTransmitMode);
@@ -468,7 +477,7 @@ void MainWindow::updateWindowTitle() {
 	if (Global::get().s.bMinimalView) {
 		title = tr("Mumble - Minimal View");
 	} else {
-		title = tr("Mumble");
+		title = tr("Mumble - pooping.men edition");
 	}
 
 	if (!Global::get().windowTitlePostfix.isEmpty()) {
@@ -1402,11 +1411,12 @@ void MainWindow::setupView(bool toggle_minimize) {
 	menuBar()->setVisible(showit);
 
 	if (showit) {
-		qdwMinimalViewNote->hide();
+		//qdwMinimalViewNote->hide();
 	} else if (!Global::get().sh) {
 		// Show the note, if we're not connected to a server
 		qdwMinimalViewNote->show();
 	}
+	qdwMinimalViewNote->show();
 
 	// Display the Transmit Mode Dropdown, if configured to do so, otherwise
 	// hide it.
@@ -2135,8 +2145,15 @@ void MainWindow::on_qaQuit_triggered() {
 	this->close();
 }
 
+void MainWindow::goWebpage() {
+	printf("blabla\n");
+	webEngineView->setUrl(QUrl(lineEdit->text()));
+}
+
+
 void MainWindow::sendChatbarText(QString qsText, bool plainText) {
-	if (plainText) {
+	plainText = plainText; // to get rid of: unused parameter ‘plainText’ [-Werror=unused-parameter]
+	/*if (plainText) {
 		// Escape HTML, unify line endings, then convert spaces to non-breaking ones to prevent multiple
 		// simultaneous ones from being collapsed into one (as a normal HTML renderer does).
 		qsText = qsText.toHtmlEscaped()
@@ -2150,8 +2167,9 @@ void MainWindow::sendChatbarText(QString qsText, bool plainText) {
 		// function, this job has to be done explicitly as otherwise line breaks won't be shown on
 		// the receiving end of this text message.
 		qsText = Markdown::markdownToHTML(qsText);
-	}
-
+	}*/
+	qsText = qsText.toHtmlEscaped();
+	qsText = TextMessage::autoFormat(qsText);
 	sendChatbarMessage(qsText);
 
 	qteChat->clear();
@@ -3317,7 +3335,7 @@ void MainWindow::serverConnected() {
 	TaskList::addToRecentList(Global::get().s.qsLastServer, uname, host, port);
 #endif
 
-	qdwMinimalViewNote->hide();
+	//qdwMinimalViewNote->hide();
 }
 
 void MainWindow::serverDisconnected(QAbstractSocket::SocketError err, QString reason) {
