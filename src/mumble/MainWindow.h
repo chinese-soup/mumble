@@ -11,6 +11,7 @@
 #include <QtNetwork/QAbstractSocket>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QSystemTrayIcon>
+#include <QtWebEngineWidgets/QWebEngineView>
 
 #include "CustomElements.h"
 #include "MUComboBox.h"
@@ -326,6 +327,7 @@ public slots:
 	void destroyUserInformation();
 	void trayAboutToShow();
 	void sendChatbarMessage(QString msg);
+	void goWebpage();
 	void sendChatbarText(QString msg, bool plainText = false);
 	void pttReleased();
 	void whisperReleased(QVariant scdata);

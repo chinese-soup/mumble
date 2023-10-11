@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>735</width>
-    <height>435</height>
+    <width>751</width>
+    <height>853</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Mumble</string>
+   <string>Mumble - pooping.men edition</string>
   </property>
   <property name="dockOptions">
    <set>QMainWindow::AllowNestedDocks|QMainWindow::AnimatedDocks</set>
@@ -47,8 +47,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>735</width>
-     <height>32</height>
+     <width>751</width>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="qmConfig">
@@ -90,10 +90,17 @@
     <addaction name="qaSelfRegister"/>
     <addaction name="qaAudioStats"/>
    </widget>
+   <widget class="QMenu" name="menupooping_men_edition">
+    <property name="title">
+     <string>pooping.men edition</string>
+    </property>
+    <addaction name="actionVisit_us_at_pooping_men"/>
+   </widget>
    <addaction name="qmServer"/>
    <addaction name="qmSelf"/>
    <addaction name="qmConfig"/>
    <addaction name="qmHelp"/>
+   <addaction name="menupooping_men_edition"/>
   </widget>
   <widget class="QDockWidget" name="qdwLog">
    <property name="minimumSize">
@@ -190,10 +197,16 @@
   </widget>
   <widget class="QDockWidget" name="qdwMinimalViewNote">
    <property name="sizePolicy">
-    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>340</width>
+     <height>350</height>
+    </size>
    </property>
    <property name="floating">
     <bool>false</bool>
@@ -219,20 +232,40 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QLabel" name="label">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>You are currently in minimal view but not connected to a server. Use the context menu to connect to a server or disable minimal view.</string>
-       </property>
-       <property name="wordWrap">
-        <bool>true</bool>
-       </property>
-      </widget>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QWebEngineView" name="webEngineView">
+         <property name="url">
+          <url>
+           <string>https://web.telegram.org/a/</string>
+          </url>
+         </property>
+         <property name="zoomFactor">
+          <double>0.800000000000000</double>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QLineEdit" name="lineEdit"/>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton">
+           <property name="text">
+            <string>Go</string>
+           </property>
+           <property name="autoDefault">
+            <bool>false</bool>
+           </property>
+           <property name="flat">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
      </item>
     </layout>
    </widget>
@@ -802,6 +835,10 @@ the channel's context menu.</string>
    </property>
   </action>
   <action name="qaUserFriendAdd">
+   <property name="icon">
+    <iconset>
+     <normaloff>skin:emblems/emblem-favorite.svg</normaloff>skin:emblems/emblem-favorite.svg</iconset>
+   </property>
    <property name="text">
     <string>Add &amp;Friend</string>
    </property>
@@ -810,10 +847,6 @@ the channel's context menu.</string>
    </property>
    <property name="whatsThis">
     <string>This will add the user as a friend, so you can recognize him on this and other servers.</string>
-   </property>
-   <property name="icon">
-    <iconset>
-     <normaloff>skin:emblems/emblem-favorite.svg</normaloff>skin:emblems/emblem-favorite.svg</iconset>
    </property>
    <property name="iconVisibleInMenu">
     <bool>true</bool>
@@ -922,15 +955,15 @@ the channel's context menu.</string>
    </property>
   </action>
   <action name="qaUserInformation">
+   <property name="icon">
+    <iconset>
+     <normaloff>skin:Information_icon.svg</normaloff>skin:Information_icon.svg</iconset>
+   </property>
    <property name="text">
     <string>&amp;Information...</string>
    </property>
    <property name="toolTip">
     <string>Query server for connection information for user</string>
-   </property>
-   <property name="icon">
-    <iconset>
-     <normaloff>skin:Information_icon.svg</normaloff>skin:Information_icon.svg</iconset>
    </property>
    <property name="iconVisibleInMenu">
     <bool>true</bool>
@@ -1057,8 +1090,18 @@ the channel's context menu.</string>
     <string>Ctrl+F</string>
    </property>
   </action>
+  <action name="actionVisit_us_at_pooping_men">
+   <property name="text">
+    <string>Visit us at pooping.men</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>QWebEngineView</class>
+   <extends>QWidget</extends>
+   <header location="global">QtWebEngineWidgets/QWebEngineView</header>
+  </customwidget>
   <customwidget>
    <class>UserView</class>
    <extends>QTreeView</extends>
