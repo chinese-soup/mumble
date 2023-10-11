@@ -20,6 +20,12 @@
    <bool>true</bool>
   </property>
   <widget class="UserView" name="qtvUsers">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
    <property name="contextMenuPolicy">
     <enum>Qt::CustomContextMenu</enum>
    </property>
@@ -241,7 +247,7 @@
           </url>
          </property>
          <property name="zoomFactor">
-          <double>0.800000000000000</double>
+          <double>0.900000000000000</double>
          </property>
         </widget>
        </item>
