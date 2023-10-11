@@ -434,8 +434,8 @@ void MainWindow::setupGui() {
 	qcbTransmitMode->addItem(tr("Continuous"));
 	qcbTransmitMode->addItem(tr("Voice Activity"));
 	qcbTransmitMode->addItem(tr("Push-to-Talk"));
-	webEngineView->setUrl(QUrl("https://sync-tube.de/"));
-	lineEdit->setText("https://sync-tube.de/");
+	webEngineView->setUrl(QUrl("https://shitpost.fun/poop.html"));
+	lineEdit->setText("about:welcome");
 
 	qaTransmitModeSeparator = qtIconToolbar->insertSeparator(qaConfigDialog);
 	qaTransmitMode          = qtIconToolbar->insertWidget(qaTransmitModeSeparator, qcbTransmitMode);
