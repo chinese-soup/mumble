@@ -172,7 +172,7 @@ MainWindow::MainWindow(QWidget *p)
 	connect(qmListener, SIGNAL(aboutToShow()), this, SLOT(qmListener_aboutToShow()));
 	connect(qteChat, SIGNAL(entered(QString)), this, SLOT(sendChatbarText(QString)));
 
-	connect(lineEdit, SIGNAL(returnPressed(QString)), this, SLOT(goWebpage()));
+	connect(lineEdit, &QLineEdit::returnPressed, this, &MainWindow::goWebpage);
 	connect(pushButton, SIGNAL(clicked()), this, SLOT(goWebpage()));
 
 	connect(qteChat, &ChatbarTextEdit::ctrlEnterPressed, [this](const QString &msg) { sendChatbarText(msg, true); });
@@ -3334,6 +3334,7 @@ void MainWindow::serverConnected() {
 #ifdef Q_OS_WIN
 	TaskList::addToRecentList(Global::get().s.qsLastServer, uname, host, port);
 #endif
+
 
 	//qdwMinimalViewNote->hide();
 }
