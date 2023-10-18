@@ -12,6 +12,9 @@
 #include <QtGui/QTextCursor>
 #include <QtGui/QTextDocument>
 
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+
 #include "ConfigDialog.h"
 #include "ui_Log.h"
 
@@ -151,13 +154,28 @@ public:
 	/// (if it is, it is used to directly log the msg)
 	static void logOrDefer(Log::MsgType mt, const QString &console, const QString &terse = QString(),
 						   bool ownMessage = false, const QString &overrideTTS = QString(), bool ignoreTTS = false);
+
+    // Accessor for the message
+    QString getMessage() const {
+        return message;
+    }
+
+	QString message;
+
+/*signals:
+	void uploadFinished();*/
+
 public slots:
 	// We have to explicitly use Log::MsgType and not only MsgType in order to be able to use QMetaObject::invokeMethod
 	// with this function.
+	QString uploadBullshit(QImage img);
+
 	void log(Log::MsgType mt, const QString &console, const QString &terse = QString(), bool ownMessage = false,
 			 const QString &overrideTTS = QString(), bool ignoreTTS = false);
 	/// Logs LogMessages that have been deferred so far
 	void processDeferredLogs();
+	//void onFinished();
+
 };
 
 class LogMessage {

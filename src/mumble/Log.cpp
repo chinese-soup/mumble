@@ -30,6 +30,19 @@
 #include <QtNetwork/QNetworkReply>
 #include <QtWidgets/QDesktopWidget>
 
+#include <QUrl>
+#include <QNetworkAccessManager>
+#include <QFile>
+#include <QJsonDocument>
+#include <QBuffer>
+#include <QFileInfo>
+#include <QImageReader>
+#include <QApplication>
+#include <QAbstractEventDispatcher>
+
+#include <QJsonDocument>
+#include <QJsonObject>
+
 const QString LogConfig::name = QLatin1String("LogConfig");
 
 static ConfigWidget *LogConfigDialogNew(Settings &st) {
@@ -593,15 +606,80 @@ QString Log::imageToImg(const QByteArray &format, const QByteArray &image) {
 	return QString::fromLatin1("<img src=\"data:image/%1;base64,%2\" />").arg(fmt).arg(QLatin1String(encoded));
 }
 
-QString Log::imageToImg(QImage img, int maxSize) {
-	constexpr int MAX_WIDTH  = 600;
-	constexpr int MAX_HEIGHT = 400;
+/*void Log::onFinished(QNetworkReply* reply) {
+	if (reply->isReadable()) {
+		auto doc = QJsonDocument::fromJson(reply->readAll());
+		qCritical() << QString(doc);
+	} else {
+		qCritical() << "ERROR!";
+	}
+	reply->deleteLater();
+}*/
 
+
+QString Log::uploadBullshit(QImage img)
+{
+	qWarning("BRUH\n");
+	Log::logOrDefer(Log::Warning, tr("Uploading image... "));
+	qApp->eventDispatcher()->processEvents(QEventLoop::AllEvents);
+
+	// Convert the QImage to a QByteArray
+	QByteArray imageByteArray;
+	QBuffer buffer(&imageByteArray);
+	buffer.open(QIODevice::WriteOnly);
+	img.save(&buffer, "PNG"); // You can choose a different format
+
+	auto url = QUrl("https://mumble.shitpost.fun/upload");
+	QNetworkRequest request(url);
+	//request.setHeader(QNetworkRequest::ContentTypeHeader, "application/application/x-www-form-urlencoded");
+	request.setHeader(QNetworkRequest::ContentTypeHeader, "image/png");
+	request.setRawHeader("Authorization", Global::get().s.qsUploaderSecretPassword.toUtf8());
+
+	auto manager = new QNetworkAccessManager(this);
+	//QObject::connect(reply, &QNetworkReply::finished, this, &MyImageUploader::onFinished);
+
+	auto* reply = manager->post(request, imageByteArray);
+	qWarning() << reply;
+
+	QEventLoop eventLoop;
+	QObject::connect(reply, &QNetworkReply::finished, &eventLoop, &QEventLoop::quit);
+	eventLoop.exec();
+
+	if (reply->error() == QNetworkReply::NoError) {
+		// The request was successful; you can handle the response
+		QByteArray response = reply->readAll();
+
+		// Parse the JSON response
+		QJsonDocument jsonDocument = QJsonDocument::fromJson(response);
+		if (!jsonDocument.isNull() && jsonDocument.isObject()) {
+			QJsonObject jsonObject = jsonDocument.object();
+			if (jsonObject.contains("filename")) {
+				QString filename = jsonObject["filename"].toString();
+				Log::logOrDefer(Log::Warning, tr("Uploaded, filename is: %1").arg(filename));
+				return filename;
+			}
+		}
+	} else {
+		// Handle the error
+		qDebug() << "Error: " << reply->errorString();
+		Log::logOrDefer(Log::Warning, tr("It's over, upload failed: %1").arg(reply->errorString()));
+		//tr("Failed at loading manual plugin: %1").arg(QString::fromUtf8(e.what())))
+	}
+
+	return QString(); // Return an empty QString or an error indicator
+
+}
+
+
+QString Log::imageToImg(QImage img, int maxSize) {
+	constexpr int MAX_WIDTH  = 200;
+	constexpr int MAX_HEIGHT = 200;
 	if ((img.width() > MAX_WIDTH) || (img.height() > MAX_HEIGHT)) {
 		img = img.scaled(MAX_WIDTH, MAX_HEIGHT, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 	}
 
-	int quality       = 100;
+	
+	int quality       = 90;
 	QByteArray format = "JPEG";
 
 	QByteArray qba;
@@ -615,7 +693,7 @@ QString Log::imageToImg(QImage img, int maxSize) {
 		imgwrite.setQuality(quality);
 		imgwrite.write(img);
 		result = imageToImg(format, qba);
-		if (result.length() < maxSize || maxSize == 0) {
+		if ((result.length() + 300) < maxSize || maxSize == 0) {
 			return result;
 		}
 		quality -= 10;
@@ -672,7 +750,8 @@ QString Log::validHtml(const QString &html, QTextCursor *tc) {
 	}
 
 	int messageSize = s.width() * s.height();
-	int allowedSize = 2048 * 2048;
+	//int allowedSize = 2048 * 2048;
+	int allowedSize = 10000 * 10000;
 
 	if (messageSize > allowedSize) {
 		QString errorSizeMessage = tr("[[ Text object too large to display ]]");

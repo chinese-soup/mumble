@@ -198,8 +198,11 @@ bool ChatbarTextEdit::sendImagesFromMimeData(const QMimeData *source) {
 					QString path = urlList[i].toLocalFile();
 					QImage image(path);
 
-					if (image.isNull())
+					if (image.isNull()){
+						qWarning() << "FIXME: File isn't an image let's do something else" << path;
 						continue;
+					}
+
 					if (emitPastedImage(image)) {
 						++count;
 					} else {
@@ -217,10 +220,35 @@ bool ChatbarTextEdit::sendImagesFromMimeData(const QMimeData *source) {
 }
 
 bool ChatbarTextEdit::emitPastedImage(QImage image) {
-	QString processedImage = Log::imageToImg(image, Global::get().uiImageLength);
-	if (processedImage.length() > 0) {
-		QString imgHtml = QLatin1String("<br />") + processedImage;
+	//QString processedImage = Log::imageToImg(image, Global::get().uiImageLength);
+	QString processedImage = Log::imageToImg(image, Global::get().uiMessageLength);
+	// qWarning() << "UI image length is " << Global::get().uiImageLength;
+	auto filename = Global::get().l->uploadBullshit(image);
+	// qWarning() << "Filename is" << filename;
+	//auto log = Global::get().l;
+
+    /*QObject::connect(log, &Log::uploadFinished, [log]() {
+        // Access the message outside of the callback
+        QString message = Global::get().l->getMessage();
+        qDebug() << "Message outside callback: " << message;
+	});*/
+
+	if (processedImage.length() > 0 && filename.length() > 0) {
+		// QString imgHtml = QLatin1String("<br />") + processedImage;
+		QString linkpath = "https://mumble.shitpost.fun/" + filename;
+		QString imgHtml;
+		if((unsigned)processedImage.length() + 100 >= Global::get().uiMessageLength) // TODO: Magic value 
+		{
+			imgHtml = QString("<br/><a href='%1'>Here would be a thumbnail.</a><h3><a href='%1'>%1</a></h3>").arg(linkpath);
+		}
+		else
+		{
+			// qWarning() << "Length is smaller" << Global::get().uiMessageLength;
+			imgHtml = QString("<br/><a href='%1'>%2</a><h3><a href='%1'>%1</a></h3>").arg(linkpath, processedImage);
+		}
+
 		emit pastedImage(imgHtml);
+		// emit pastedImage(QLatin1String("<br />") + processedImage);
 		return true;
 	}
 	return false;

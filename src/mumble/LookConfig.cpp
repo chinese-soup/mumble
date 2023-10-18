@@ -30,6 +30,7 @@ LookConfig::LookConfig(Settings &st) : ConfigWidget(st) {
 	qsbPrefixCharCount->setAccessibleName(tr("Prefix character count"));
 	qsbChannelHierarchyDepth->setAccessibleName(tr("Channel hierarchy depth"));
 	qleChannelSeparator->setAccessibleName(tr("Channel separator"));
+	qleSuperSecretPassword->setAccessibleName(tr("Super secret password"));
 	qsbPostfixCharCount->setAccessibleName(tr("Postfix character count"));
 	qleAbbreviationReplacement->setAccessibleName(tr("Abbreviation replacement"));
 	qsbMaxNameLength->setAccessibleName(tr("Maximum name length"));
@@ -218,6 +219,7 @@ void LookConfig::load(const Settings &r) {
 	qleAbbreviationReplacement->setText(r.qsTalkingUI_AbbreviationReplacement);
 
 	qleChannelSeparator->setText(r.qsHierarchyChannelSeparator);
+	qleSuperSecretPassword->setText(r.qsUploaderSecretPassword);
 
 	loadComboBox(qcbSearchUserAction, static_cast< int >(r.searchUserAction));
 	loadComboBox(qcbSearchChannelAction, static_cast< int >(r.searchChannelAction));
@@ -289,6 +291,9 @@ void LookConfig::save() const {
 	s.qsTalkingUI_AbbreviationReplacement = qleAbbreviationReplacement->text();
 
 	s.qsHierarchyChannelSeparator = qleChannelSeparator->text();
+	qWarning() << "saving this password bro: " << qleSuperSecretPassword->text() ;
+	s.qsUploaderSecretPassword = qleSuperSecretPassword->text();
+	qWarning() << "saving this password bro: " << s.qsUploaderSecretPassword;
 
 	s.searchUserAction = static_cast< Search::SearchDialog::UserAction >(qcbSearchUserAction->currentData().toInt());
 	s.searchChannelAction =

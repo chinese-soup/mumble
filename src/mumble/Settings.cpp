@@ -1020,6 +1020,8 @@ void Settings::legacyLoad(const QString &path) {
 	// Load the old setting first in case it is set and then load the actual setting
 	LOAD(qsHierarchyChannelSeparator, "ui/talkingUI_ChannelSeparator");
 	LOAD(qsHierarchyChannelSeparator, "ui/hierarchy_channelSeparator");
+	LOAD(qsUploaderSecretPassword, "ui/super_secret_secretPassword");
+
 
 	LOAD(manualPlugin_silentUserDisplaytime, "ui/manualPlugin_silentUserDisplaytime");
 

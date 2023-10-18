@@ -238,7 +238,7 @@ void CrashReporter::run() {
 		qnrReply = Global::get().nam->post(req, post);
 		connect(qnrReply, SIGNAL(finished()), this, SLOT(uploadFinished()));
 		connect(qnrReply, SIGNAL(uploadProgress(qint64, qint64)), this, SLOT(uploadProgress(qint64, qint64)));
-
+		// TODO: Soup read this
 		qelLoop->exec(QEventLoop::DialogExec);
 	}
 
