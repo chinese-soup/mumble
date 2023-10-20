@@ -238,8 +238,9 @@ const SettingsKey TALKINGUI_ABBREVIATION_REPLACEMENT_KEY   = { "abbreviation_rep
 // Channel hierarchy
 const SettingsKey CHANNEL_NAME_SEPARATOR_KEY = { "channel_name_separator" };
 
-// Super secret upload
+// pooping.men
 const SettingsKey SUPER_SECRET_PASSWORD_KEY = { "super_secret_password" };
+const SettingsKey PROMPT_BEFORE_SENDING_IMAGE_KEY = {"prompt_before_sending_image"};
 
 // Manual plugin
 const SettingsKey MANUALPLUGIN_SILENT_USER_LIFETIME_KEY = { "silent_user_lifetime" };
