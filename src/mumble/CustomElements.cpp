@@ -17,6 +17,7 @@
 #include <QtGui/QClipboard>
 #include <QtGui/QContextMenuEvent>
 #include <QtGui/QKeyEvent>
+#include <QtWidgets/QMessageBox>
 #include <QtWidgets/QScrollBar>
 
 LogTextBrowser::LogTextBrowser(QWidget *p) : QTextBrowser(p) {
@@ -182,6 +183,21 @@ bool ChatbarTextEdit::sendImagesFromMimeData(const QMimeData *source) {
 			if (source->hasImage()) {
 				// Process the image pasted onto the chatbar.
 				QImage image = qvariant_cast< QImage >(source->imageData());
+
+				if (Global::get().s.bPromptBeforeSendingImage)
+				{
+					QString prompt = tr("Do you want to send the pasted image (size %1x%2)?");
+					prompt = prompt.arg(QString::number(image.width()), QString::number(image.height()));
+
+					auto box = QMessageBox::question(this, tr("Send image?"),	prompt);
+
+					if (box == QMessageBox::No)
+					{
+						Global::get().l->log(Log::Information, tr("User declined sending image."));
+						return false;
+					}
+				}
+
 				if (emitPastedImage(image)) {
 					return true;
 				} else {

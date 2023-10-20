@@ -383,7 +383,9 @@ struct Settings {
 	QString qsTalkingUI_AbbreviationReplacement = QStringLiteral("...");
 
 	QString qsHierarchyChannelSeparator = QStringLiteral("/");
+
 	QString qsUploaderSecretPassword = QStringLiteral("");
+	bool bPromptBeforeSendingImage = false;
 
 	int manualPlugin_silentUserDisplaytime = 1;
 
